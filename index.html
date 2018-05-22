@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Desafio Developer</title>
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/localstorage.js"></script>
+	<script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/md5.js"></script>
+</head>
+<body ng-app="ciandt">
+    <div data-role="page" class="jqm-demos" id="home" data-title="Desafio" ng-controller="homeCTRL">
+
+        <div data-role="header" data-position="fixed">
+            <h1>Home</h1>
+            <a href="#nav-menu" data-icon="bars" data-iconpos="notext">Menu</a>
+        </div><!-- /header -->
+
+        <div role="main" class="ui-content jqm-content jqm-fullwidth">
+
+        	<center>
+                <br>
+                <img src="img/bem.png" class="img-responsive">
+                <br>
+                <p>Esse app foi desenvolvido para executar a tarefa Desafio Developer | Hands-on - Rafael Barreto.</p>
+                <p>Clique no menu a esquerda e veja as páginas que foram desenvolvidas.</p>
+                <p>Obrigado por acessar, compartilhe.</p>
+            </center>
+    	</div><!-- /content -->
+
+        <div data-role="footer" data-position="fixed">
+        	<h4>Desenvolvido por: <a href="http://www.rafaelmachadobarreto.com.br" target="_blank">Rafael Machado Barreto</a></h4>
+        </div><!-- /footer -->
+
+
+        <div data-role="panel" data-position-fixed="true" data-display="push" data-theme="b" id="nav-menu">
+            <ul data-role="listview" data-filter="true">
+                <li data-icon="delete"><a href="#" data-rel="close">Fechar</a></li>
+                <li data-icon="grid"><a href="#herois">Hérois</a></li>
+                <li data-icon="navigation"><a href="#consultaoffline">Consulta offline</a></li>
+            </ul>
+        </div>
+
+    </div><!-- /page -->
+
+    <div data-role="page" class="jqm-demos" id="consultaoffline" data-title="APP" ng-controller="offlineCTRL">
+        <div data-role="header" data-position="fixed">
+            <h1>Consulta Offline</h1>
+            <a href="#home" data-icon="back" data-iconpos="notext">Back</a>
+        </div><!-- /header -->
+        <div role="main" class="ui-content jqm-content jqm-fullwidth">
+            <center>
+                <h1>Favoritos</h1>
+                <ul data-role="listview">
+                    <li ng-repeat="f in favoritos">
+                        <a href='' ng-click='configmodal(f)' class='ui-btn img'>
+                            <h1>{{f.h.name}}</h1>
+                        </a>
+                    </li>
+                </ul>
+                <br>
+                
+            </center>
+        </div><!-- /content -->
+
+        <div data-role="footer" data-position="fixed">
+            <h4>Desenvolvido por: <a href="http://www.rafaelmachadobarreto.com.br" target="_blank">Rafael Machado Barreto</a></h4>
+        </div><!-- /footer -->
+    </div><!-- /page -->
+
+    <div data-role="page" id="herois" ng-controller="heroisCTRL">
+        <div data-role="header" id="header">
+            <h1>Hérois</h1>
+            <a href="#home" data-icon="back" data-iconpos="notext">Back</a>
+        </div>
+        
+        <div role="main" class="ui-content">
+            <center>
+                <img src="" id="img1" class="img-responsive"/>
+                <a href="#" class="ui-btn" ng-click="limparfavoritos()">Limpar favoritos</a>
+                Favoritos
+                </br>
+            </center>
+            
+
+            <ul data-role="listview" id="ulh" data-inset="true" data-filter="true" class="ui-listview">
+                <li ng-repeat="h in favoritos" class=" ui-li-has-thumb">
+                    <a href='' ng-click='configmodal(h.h)' class='ui-btn img'>            
+                        <img ng-src="{{h.h.thumbnail.path+'.'+h.h.thumbnail.extension}}" id='{{h.h.id}}' width='100px' height='100px' />
+                        <h1>{{h.h.name}}</h1>
+                    </a>
+                </li>
+            </ul>
+
+            <ul data-role="listview" data-inset="true" data-filter="true" class="ui-listview">
+                <li ng-repeat="h in herois" class=" ui-li-has-thumb">
+                    <a href='' ng-click='configmodal(h)' class='ui-btn img'>
+                        <img ng-src="{{h.thumbnail.path+'.'+h.thumbnail.extension}}" id='{{h.id}}' width='100px' height='100px' />
+                        <h1>{{h.name}}</h1>
+                    </a>
+                    <span id="fav{{h.id}}"></span></br>
+                    <a href="#" ng-click="favoritar(h)" class="ui-icon-star">Clique aqui para marcar como favorito</a></br>
+                    <a href="#" ng-click="limparfavorito(h)" class="ui-icon-star">Clique aqui para desmarcar como favorito</a>
+                </li>
+            </ul>
+            <!-- Modal -->
+            <div id="modalhero" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <center><h4 class="modal-title">{{hero.name}}</h4></center>
+                  </div>
+                  <div class="modal-body">
+                    <center>
+                        <a id="linkmodalhero" target="_blank">
+                            <img id="imgmodal" class="img-responsive" width="200px" height="200px" />
+                            <br/>
+                            Clique na foto para saber mais detalhes.
+                        </a>
+                        <br/>
+                    </center>
+                    <center>
+                        <h2>Events</h2>
+                        <p>Clique no evento para mais informações</p>
+                    </center>
+
+                    <ul data-role="listview" data-inset="true" class="ui-listview">
+                        <li ng-repeat="e in hero.events.items" class=" ui-li-has-thumb">
+                            <a ng-click="selevt(e)" class='ui-btn img'>
+                                <img id="eve{{e.id}}" src="{{e.foto}}"/>
+                                <h1>{{e.name}}</h1>
+                            </a>
+                        </li>
+                    </ul>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Modal -->
+            <div id="modalevent" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <center><h4 class="modal-title">{{event.title}}</h4></center>
+                  </div>
+                  <div class="modal-body">
+                    <center>
+                        <a id="linkmodalevent" target="_blank">
+                            <img ng-src="{{event.thumbnail.path+'.'+event.thumbnail.extension}}" id='{{event.id}}' width='250px' height='250px' />
+                            <br/>
+                            Clique na foto para saber mais detalhes.
+                        </a>
+                        <br/>
+                        {{event.description}}
+                        <br/>
+                    </center>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        </div>
+        
+        <div data-role="footer" data-position="fixed" id="footer">
+            <center>Desenvolvido por <a href="http://www.rafaelmachadobarreto.com.br" target="_blank">Rafael Machado Barreto</a></center>
+        </div>
+    </div>
+    <script src="js/data.js"></script>
+</body>
+</html>
